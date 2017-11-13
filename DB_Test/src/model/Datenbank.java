@@ -5,10 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Datenbank {
-	
-	
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "org.postgresql.Driver";  
@@ -24,7 +23,9 @@ public class Datenbank {
 	public static void main(String[] args) {
 		VerbindungAufbauen();
 		//Datenbanklöschen();
-		DatenbankErzeugung();
+		//DatenbankErzeugung();
+		//Datenlöschen();
+		Datenherholen();
 	}
 
 	public static void VerbindungAufbauen()
@@ -56,8 +57,11 @@ public class Datenbank {
 
 	}
 	
-	public static void Datenherholen()
+	// TODO pls help Dave
+	public static ArrayList<String[]> Datenherholen()
 	{
+		ArrayList<String[]> DBDaten = new ArrayList<String[]>();
+		
 		System.out.println("Creating statement...");
 		String sql;
 		sql = "SELECT id, first, last, age FROM Employee";
@@ -67,11 +71,20 @@ public class Datenbank {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return DBDaten;
 		
 	}
 	
-	public static void Datenhineinschreiben()
+	// TODO pls help Dave
+	public static void Datenhineinschreiben(/*new Array*/)
 	{
+		//Erstellen eines Arrays
+		String[] SDaten = new String[4];
+		SDaten[0] = "2";
+		SDaten[1] = "Sara";
+		SDaten[2] = "Hindelang";
+		SDaten[3] = "18";
+		
 		System.out.println("Creating statement...");
 		String sql;
 		sql = "Insert Into Employee (id, first, last, age) values (?,?,?,?)";
@@ -85,6 +98,7 @@ public class Datenbank {
 		
 	}
 	
+	//Löscht nur den Inhalt der Tabelle
 	public static void Datenlöschen()
 	{
 		System.out.println("Creating statement...");
@@ -100,7 +114,7 @@ public class Datenbank {
 		
 	}
 
-	
+	//Löscht die ganze Tabelle
 	public static void Datenbanklöschen()
 	{
 		System.out.println("Creating statement...");
