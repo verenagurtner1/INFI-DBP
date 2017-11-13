@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Datenbank {
+	
+	
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "org.postgresql.Driver";  
