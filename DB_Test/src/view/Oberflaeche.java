@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import control.btnDatenAuslesenListener;
 import control.btnDatenHineinschreibenListener;
@@ -39,6 +40,7 @@ public class Oberflaeche extends JFrame {
 				try {
 					Oberflaeche frame = new Oberflaeche();
 					frame.setVisible(true);
+					model.Datenbank.VerbindungAufbauen();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -95,6 +97,7 @@ public class Oberflaeche extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(new Object [][] {}, new String[] {"ID","Vorname","Nachname","Alter"}));
 		
 		JButton btnDatenLschen = new JButton("Daten l\u00F6schen");
 		contentPane.add(btnDatenLschen, "cell 1 9,growx");
@@ -107,6 +110,7 @@ public class Oberflaeche extends JFrame {
 		JButton btnDatenAuslesen = new JButton("Daten auslesen");
 		contentPane.add(btnDatenAuslesen, "cell 3 9,growx");
 		btnDatenAuslesen.addActionListener(new btnDatenAuslesenListener());
+		
 	}
 
 	public static JTextField getTextField_Vorname() {

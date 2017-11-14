@@ -20,7 +20,7 @@ public class btnDatenHineinschreibenListener implements ActionListener {
 		System.out.println(Daten[2]);
 		System.out.println(Daten[3]);
 		
-		model.Datenbank.Datenhineinschreiben();
+		model.Datenbank.Datenhineinschreiben(Daten);
 		
 
 	}

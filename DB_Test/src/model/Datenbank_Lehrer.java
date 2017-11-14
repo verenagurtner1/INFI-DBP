@@ -32,7 +32,7 @@ public class Datenbank_Lehrer {
 				stmt = conn.createStatement();
 				String sql;
 				//sql = "SELECT id, first, last, age FROM Employee";
-					      sql = "CREATE TABLE IF NOT EXIST Employee ("
+					      sql = "CREATE TABLE IF NOT EXISTS Employee ("
 					    		+ "id SERIAL primary key,"
 					      		+ "first character varying not null," 
 					      		+ "last character varying not null,"
