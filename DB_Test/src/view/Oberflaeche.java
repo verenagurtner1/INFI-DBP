@@ -53,55 +53,58 @@ public class Oberflaeche extends JFrame {
 	 */
 	public Oberflaeche() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 559, 360);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(240, 255, 240));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[32.00][grow][][grow][grow]", "[][][][][][][][grow][][grow]"));
+		contentPane.setLayout(new MigLayout("", "[grow][][][grow]", "[][][][][][][][grow][][grow]"));
 		
 		JLabel lblDatenbankverwaltung = new JLabel("Datenbankverwaltung");
 		lblDatenbankverwaltung.setFont(new Font("Tahoma", Font.BOLD, 13));
-		contentPane.add(lblDatenbankverwaltung, "cell 2 0");
+		contentPane.add(lblDatenbankverwaltung, "cell 1 0 2 1");
 		
 		JLabel lblId = new JLabel("ID:");
-		contentPane.add(lblId, "cell 2 1,alignx trailing");
+		contentPane.add(lblId, "cell 1 1,alignx trailing");
 		
 		textField_ID = new JTextField();
-		contentPane.add(textField_ID, "cell 3 1,growx");
+		contentPane.add(textField_ID, "cell 2 1,growx");
 		textField_ID.setColumns(10);
 		
 		JLabel lblVorname = new JLabel("Vorname:");
-		contentPane.add(lblVorname, "cell 2 3,alignx trailing");
+		contentPane.add(lblVorname, "cell 1 3,alignx trailing");
 		
 		textField_Vorname = new JTextField();
-		contentPane.add(textField_Vorname, "cell 3 3,growx");
+		contentPane.add(textField_Vorname, "cell 2 3,growx");
 		textField_Vorname.setColumns(10);
 		
 		JLabel lblNachname = new JLabel("Nachname:");
-		contentPane.add(lblNachname, "cell 2 4,alignx trailing");
+		contentPane.add(lblNachname, "cell 1 4,alignx trailing");
 		
 		textField_Nachname = new JTextField();
-		contentPane.add(textField_Nachname, "cell 3 4,growx");
+		contentPane.add(textField_Nachname, "cell 2 4,growx");
 		textField_Nachname.setColumns(10);
 		
 		JLabel lblAlter = new JLabel("Alter:");
-		contentPane.add(lblAlter, "cell 2 5,alignx trailing");
+		contentPane.add(lblAlter, "cell 1 5,alignx trailing");
 		
 		textField_Alter = new JTextField();
-		contentPane.add(textField_Alter, "cell 3 5,growx");
+		contentPane.add(textField_Alter, "cell 2 5,growx");
 		textField_Alter.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, "cell 1 7 4 1,grow");
+		contentPane.add(scrollPane, "cell 0 7 4 1,grow");
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(new Object [][] {}, new String[] {"ID","Vorname","Nachname","Alter"}));
 		
 		JButton btnDatenLschen = new JButton("Daten l\u00F6schen");
-		contentPane.add(btnDatenLschen, "cell 1 9,growx");
+		contentPane.add(btnDatenLschen, "cell 0 9,growx");
 		btnDatenLschen.addActionListener(new btnDatenLschenListener());
+		
+		JButton btnDatenUpdaten = new JButton("Daten updaten");
+		contentPane.add(btnDatenUpdaten, "cell 1 9,growx");
 		
 		JButton btnDatenHineinschreiben = new JButton("Daten hineinschreiben");
 		contentPane.add(btnDatenHineinschreiben, "cell 2 9,growx");

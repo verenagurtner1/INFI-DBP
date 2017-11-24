@@ -21,6 +21,8 @@ public class Datenbank {
 	static Connection conn = null;
 	static Statement stmt = null;
 	static PreparedStatement pstmt = null;
+	static ResultSet rs = null;
+	static String id;
 
 	public static void main(String[] args) {
 		VerbindungAufbauen();
@@ -70,7 +72,7 @@ public class Datenbank {
 		sql = "SELECT id, first, last, age FROM Employee";
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 
 			while(rs.next()){
 				/*//Retrieve by column name
@@ -79,11 +81,11 @@ public class Datenbank {
 				String first = rs.getString("first");
 				String last = rs.getString("last");
 				 */
-				String[] zeile = new String[3];
+				String[] zeile = new String[4];
 				System.out.print("Gelesen wurde: ");
 				for (int i = 0; i < 4; i++) {
 					zeile[i] = rs.getString(i+1);
-					System.out.print(" '" + zeile[i] + "'");	//zur Kontrolle
+					System.out.println(" '" + zeile[i] + "'");	//zur Kontrolle
 
 				}
 				DBDaten.add(zeile);
@@ -103,7 +105,7 @@ public class Datenbank {
 
 	}
 
-	// TODO pls help Dave
+	
 	public static void Datenhineinschreiben(String[] SDaten)
 	{
 		/*
@@ -123,6 +125,7 @@ public class Datenbank {
 			{
 				String sql;
 				sql = "Insert Into Employee (id, first, last, age) values (?,?,?,?)";
+				//sql = "Insert Into Employee (id, first, last, age) values ("+SDaten[0]+",'"+SDaten[1]+"','"+SDaten[1]+"',"+SDaten[0]+")";
 				pstmt = conn.prepareStatement(sql);
 			}
 
@@ -181,5 +184,38 @@ public class Datenbank {
 		System.out.println("Tabelle in Datenbank wurde gelöscht");
 
 
+	}
+	
+	// TODO fertig machen
+	public static void Updatefunktion()
+	{
+		
+		System.out.println("Creating Updatestatement...");
+
+		try {
+			//PreparedStatement lohnt sich erst von mans erst verwendet wenn sersch null, also nit immer wieder neu preparen, und sql braucht man erst wenn man pstmt braucht
+			if(pstmt==null)
+			{
+				String sql;
+				
+				sql = "Update Employee SET vorname='Gustav', nachname='Günther',alter='52' where id=\'"+id+"\'";
+				//sql = "Insert Into Employee (id, first, last, age) values ("+SDaten[0]+",'"+SDaten[1]+"','"+SDaten[1]+"',"+SDaten[0]+")";
+				pstmt = conn.prepareStatement(sql);
+			}
+
+			//Integer.parseInt(SDaten[0]) wandelt STring in integer
+			//pstmt.setInt(1, Integer.parseInt(SDaten[0]));
+			//pstmt.setString(2, SDaten[1]);
+			//pstmt.setString(3, SDaten[2]);
+			//pstmt.setInt(4, Integer.parseInt(SDaten[3]));
+
+			pstmt.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Daten wurden in Datenbank upgedatet");
+		
 	}
 }
