@@ -22,6 +22,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 
+/**
+ * Die Daten werden in Datenbank hineingeschrieben und ausgelesen jedoch nicht in die
+ * JTable in der GUI hineingeschrieben
+ * 
+ * @author verena
+ *
+ */
+
 public class Oberflaeche extends JFrame {
 
 	static private JPanel contentPane;
