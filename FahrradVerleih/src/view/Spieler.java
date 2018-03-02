@@ -43,8 +43,8 @@ public class Spieler extends JFrame {
 	private JTextField textField_PLZ;
 	private JTextField textField_Geburtstag;
 	private JTextField textField_Passwort;
-	private JTextField textField_UpdateNeueSpaltInhalt;
-	private JTextField textField_UpdateSpaltenname;
+	private JTextField textField_UpdateSpalteinhalt;
+	private JTextField textField_UpdateID;
 	private Spieler splr;
 	private JTextField txtIdloesch;
 	private JTextField textField_Spalte;
@@ -140,6 +140,7 @@ public class Spieler extends JFrame {
 
 		JButton btnTabelleAktualisieren = new JButton("Tabelle aktualisieren");
 		contentPane.add(btnTabelleAktualisieren, "cell 0 15");
+		btnTabelleAktualisieren.addActionListener(new btnTabelleAktualisierenListener());
 
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, "cell 0 19 4 1,grow");
@@ -151,23 +152,24 @@ public class Spieler extends JFrame {
 		JLabel lblIdDerZu = new JLabel("ID der zu Ver\u00E4ndernden Daten:");
 		contentPane.add(lblIdDerZu, "cell 0 21,alignx trailing");
 
-		textField_UpdateSpaltenname = new JTextField();
-		contentPane.add(textField_UpdateSpaltenname, "cell 1 21,growx");
-		textField_UpdateSpaltenname.setColumns(10);
+		textField_UpdateID = new JTextField();
+		contentPane.add(textField_UpdateID, "cell 1 21,growx");
+		textField_UpdateID.setColumns(10);
 
 		JLabel lblNeuerEintrag = new JLabel("neuer Eintrag:");
 		contentPane.add(lblNeuerEintrag, "cell 0 23,alignx trailing");
 
-		textField_UpdateNeueSpaltInhalt = new JTextField();
-		contentPane.add(textField_UpdateNeueSpaltInhalt, "cell 1 23,growx");
-		textField_UpdateNeueSpaltInhalt.setColumns(10);
+		textField_UpdateSpalteinhalt = new JTextField();
+		contentPane.add(textField_UpdateSpalteinhalt, "cell 1 23,growx");
+		textField_UpdateSpalteinhalt.setColumns(10);
 
 		JButton btnDatenUpdaten = new JButton("Daten updaten");
 		contentPane.add(btnDatenUpdaten, "cell 3 23,growx");
-		
+		btnDatenUpdaten.addActionListener(new btnDatenUpdatenListener());
+
 		JLabel lblSpalteWelcheGendert = new JLabel("Spalte welche ge\u00E4ndert werden soll:");
 		contentPane.add(lblSpalteWelcheGendert, "cell 0 24,alignx trailing");
-		
+
 		textField_Spalte = new JTextField();
 		contentPane.add(textField_Spalte, "cell 1 24,growx");
 		textField_Spalte.setColumns(10);
@@ -181,7 +183,7 @@ public class Spieler extends JFrame {
 
 		JButton btnDatenLschen = new JButton("Daten l\u00F6schen");
 		contentPane.add(btnDatenLschen, "cell 3 25,growx");
-		//btnDatenLschen.addActionListener(new btnDatenLschenListener());
+		btnDatenLschen.addActionListener(new btnDatenLschenListener());
 
 	}
 
@@ -243,6 +245,37 @@ public class Spieler extends JFrame {
 		this.textField_Passwort = textField_Passwort;
 	}
 
+	public JTextField getTextField_UpdateNeueSpaltInhalt() {
+		return textField_UpdateSpalteinhalt;
+	}
+
+	public void setTextField_UpdateNeueSpaltInhalt(JTextField textField_UpdateNeueSpaltInhalt) {
+		this.textField_UpdateSpalteinhalt = textField_UpdateNeueSpaltInhalt;
+	}
+
+	public JTextField getTextField_UpdateSpaltenname() {
+		return textField_UpdateID;
+	}
+
+	public void setTextField_UpdateSpaltenname(JTextField textField_UpdateSpaltenname) {
+		this.textField_UpdateID = textField_UpdateSpaltenname;
+	}
+
+	public JTextField getTxtIdloesch() {
+		return txtIdloesch;
+	}
+
+	public void setTxtIdloesch(JTextField txtIdloesch) {
+		this.txtIdloesch = txtIdloesch;
+	}
+
+	public JTextField getTextField_Spalte() {
+		return textField_Spalte;
+	}
+
+	public void setTextField_Spalte(JTextField textField_Spalte) {
+		this.textField_Spalte = textField_Spalte;
+	}
 
 
 	public class btnDatenHineinschreibenListener implements ActionListener {
@@ -255,11 +288,14 @@ public class Spieler extends JFrame {
 			b.setNachname(textField_Nachname.getText());
 			b.setBenutzername(textField_Benutzername.getText());
 			b.setEmail(textField_EMail.getText());
-			b.setPLZ(Integer.parseInt(textField_PLZ.getText()));
+			if(textField_PLZ.getText()!="")
+			{
+				b.setPLZ(Integer.parseInt(textField_PLZ.getText()));
+			}
 			b.setGeburtstagsdatum(textField_Geburtstag.getText());
 			b.setPassword(textField_Passwort.getText());
 			b.setFahrradführerschein(1);
-		//	b.setFahrradführerschein(i);
+			//	b.setFahrradführerschein(i);
 
 			try {
 				DBManager db = new DBManager();
@@ -281,15 +317,16 @@ public class Spieler extends JFrame {
 
 	}
 
-	public class btnTabelleAktualisieren implements ActionListener {
+	public class btnTabelleAktualisierenListener implements ActionListener {
 		ArrayList<Benutzer> b = null;
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
 				b = db.readBenutzer(conn);
+
 
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
@@ -303,25 +340,31 @@ public class Spieler extends JFrame {
 				fail();
 			}
 
-			if (textField_Vorname.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(splr, "kein Name angegeben!");
-				textField_Vorname.requestFocus();
-			} else {
-				DefaultTableModel m = (DefaultTableModel) table.getModel();
-				for(int i=0;i<b.size();i++)
-				{
-					m.addRow(new String[] {textField_Nachname.getText(),
-							textField_EMail.getText(), textField_Benutzername.getText(),
-							textField_PLZ.getText(), textField_Geburtstag.getText() });	
-				}
-				
+
+			DefaultTableModel m = (DefaultTableModel) table.getModel();
+			if (table.getRowCount() > 0) {
+				m.setRowCount(0);
 			}
+			for(int i=0;i<b.size();i++)
+			{	
+				m.addRow(new String[] {""+(b.get(i).getBenutzerid()),b.get(i).getVorname(),b.get(i).getNachname(),b.get(i).getBenutzername(),b.get(i).getEmail(),b.get(i).getGeburtstagsdatum(),""+b.get(i).getPLZ(),""+b.get(i).isFahrradführerschein() });	
+			}
+
 		}
 	}
+
 	public class btnDatenLschenListener implements ActionListener {
 
-		int id = Integer.parseInt(txtIdloesch.getText());
+		int id = 0;
+		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			if(txtIdloesch.getText()!="")
+			{
+				id = Integer.parseInt(txtIdloesch.getText());
+			}
+			System.out.println("Daten löschen bei ID: "+id);
+
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
@@ -337,14 +380,21 @@ public class Spieler extends JFrame {
 		}
 
 	}
-	
-	public class btnDatenUpdaten implements ActionListener {
 
-		int id = Integer.parseInt(textField_UpdateSpaltenname.getText());
-		String spalte = textField_Spalte.getText();
-		String spalteninhalt = textField_UpdateNeueSpaltInhalt.getText();
-		
+	public class btnDatenUpdatenListener implements ActionListener {
+
+		int id = 0;
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			if(textField_UpdateID.getText()!="")
+			{
+				id = Integer.parseInt(textField_UpdateID.getText());
+			}
+			System.out.println("Daten updaten bei ID: "+id);
+			String spalte = textField_Spalte.getText();
+			String spalteninhalt = textField_UpdateSpalteinhalt.getText();
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
@@ -355,10 +405,8 @@ public class Spieler extends JFrame {
 			}
 			catch (SQLException e1) {
 				e1.printStackTrace();
-				fail();
 			}
 		}
 
 	}
-
 }
