@@ -1,6 +1,5 @@
 package view;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -13,12 +12,13 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,20 +29,21 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 import model.Benutzer;
 import model.DBManager;
+import model.Fahrrad;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JRadioButton;
+import view.Spieler.btnDatenHineinschreibenListener;
+import view.Spieler.btnDatenLschenListener;
+import view.Spieler.btnDatenUpdatenListener;
+import view.Spieler.btnTabelleAktualisierenListener;
 
-public class Spieler extends JFrame {
+public class FahrradGUI extends JFrame {
 
 	static private JPanel contentPane;
-	static private JTextField textField_Nachname;
-	static private JTextField textField_EMail;
-	static private JTextField textField_Benutzername;
+	static private JTextField textField_Art;
+	static private JTextField textField_Zoll;
 	static private JTable table;
-	static private JTextField textField_Vorname;
-	private JTextField textField_PLZ;
-	private JTextField textField_Geburtstag;
-	private JTextField textField_Passwort;
+	static private JTextField textField_Marke;
+	private JTextField textField_Farbe;
 	private JTextField textField_UpdateSpalteinhalt;
 	private JTextField textField_UpdateID;
 	private Spieler splr;
@@ -57,7 +58,7 @@ public class Spieler extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Spieler frame = new Spieler();
+					FahrradGUI frame = new FahrradGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,7 +70,7 @@ public class Spieler extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Spieler() {
+	public FahrradGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 555);
 		contentPane = new JPanel();
@@ -78,64 +79,40 @@ public class Spieler extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow][grow][grow][grow]", "[][][][][][][][][][][][grow][][grow][][][][][][][][][][][][]"));
 
-		JLabel lblDatenbankverwaltung = new JLabel("Benutzer");
+		JLabel lblDatenbankverwaltung = new JLabel("Fahrrad");
 		lblDatenbankverwaltung.setFont(new Font("Tahoma", Font.BOLD, 13));
 		contentPane.add(lblDatenbankverwaltung, "cell 1 0 2 1");
 
-		JLabel lblId = new JLabel("Vorname:");
+		JLabel lblId = new JLabel("Marke:");
 		contentPane.add(lblId, "cell 0 1,alignx trailing");
 
-		textField_Vorname = new JTextField();
-		contentPane.add(textField_Vorname, "cell 1 1,growx");
-		textField_Vorname.setColumns(10);
+		textField_Marke = new JTextField();
+		contentPane.add(textField_Marke, "cell 1 1,growx");
+		textField_Marke.setColumns(10);
 
-		JLabel lblEmail = new JLabel("E-Mail:");
-		contentPane.add(lblEmail, "cell 2 1,alignx trailing");
-
-		textField_EMail = new JTextField();
-		contentPane.add(textField_EMail, "cell 3 1,growx");
-		textField_EMail.setColumns(10);
-
-		JLabel lblNachname = new JLabel("Nachname:");
+		JLabel lblNachname = new JLabel("Art:");
 		contentPane.add(lblNachname, "cell 0 3,alignx trailing");
 
-		textField_Nachname = new JTextField();
-		contentPane.add(textField_Nachname, "cell 1 3,growx");
-		textField_Nachname.setColumns(10);
+		textField_Art = new JTextField();
+		contentPane.add(textField_Art, "cell 1 3,growx");
+		textField_Art.setColumns(10);
 
-		JLabel lblGeburtstag = new JLabel("Geburtstag:");
-		contentPane.add(lblGeburtstag, "cell 2 3,alignx trailing");
-
-		textField_Geburtstag = new JTextField();
-		contentPane.add(textField_Geburtstag, "cell 3 3,growx");
-		textField_Geburtstag.setColumns(10);
-
-		JLabel lblVorname = new JLabel("PLZ:");
+		JLabel lblVorname = new JLabel("Farbe:");
 		contentPane.add(lblVorname, "cell 0 4,alignx trailing");
 
-		textField_PLZ = new JTextField();
-		contentPane.add(textField_PLZ, "cell 1 4,growx");
-		textField_PLZ.setColumns(10);
+		textField_Farbe = new JTextField();
+		contentPane.add(textField_Farbe, "cell 1 4,growx");
+		textField_Farbe.setColumns(10);
 
-		JLabel lblPasswort = new JLabel("Passwort:");
-		contentPane.add(lblPasswort, "cell 2 4,alignx trailing");
-
-		textField_Passwort = new JTextField();
-		contentPane.add(textField_Passwort, "cell 3 4,growx");
-		textField_Passwort.setColumns(10);
-
-		JLabel lblAlter = new JLabel("Benutzername:");
+		JLabel lblAlter = new JLabel("Zoll:");
 		contentPane.add(lblAlter, "cell 0 5,alignx trailing");
 
-		textField_Benutzername = new JTextField();
-		contentPane.add(textField_Benutzername, "flowy,cell 1 5,growx");
-		textField_Benutzername.setColumns(10);
-
-		JRadioButton rdbtnFahrradfhrerschein = new JRadioButton("Fahrradf\u00FChrerschein");
-		contentPane.add(rdbtnFahrradfhrerschein, "cell 3 5");
+		textField_Zoll = new JTextField();
+		contentPane.add(textField_Zoll, "flowy,cell 1 5,growx");
+		textField_Zoll.setColumns(10);
 
 		JButton btnDatenHineinschreiben = new JButton("Benutzer \u00FCbernehmen");
-		contentPane.add(btnDatenHineinschreiben, "cell 3 7,growx");
+		contentPane.add(btnDatenHineinschreiben, "cell 2 7,growx");
 		btnDatenHineinschreiben.addActionListener(new btnDatenHineinschreibenListener());
 
 		JButton btnTabelleAktualisieren = new JButton("Tabelle aktualisieren");
@@ -147,7 +124,7 @@ public class Spieler extends JFrame {
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(new Object [][] {}, new String[] {"ID","Vorname","Nachname","Benutzername","E-Mail","Geburtstag","PLZ","Fahrradführerschein"}));
+		table.setModel(new DefaultTableModel(new Object [][] {}, new String[] {"ID","Marke","Art","Farbe","Zoll"}));
 
 		JLabel lblIdDerZu = new JLabel("ID der zu Ver\u00E4ndernden Daten:");
 		contentPane.add(lblIdDerZu, "cell 0 21,alignx trailing");
@@ -164,7 +141,7 @@ public class Spieler extends JFrame {
 		textField_UpdateSpalteinhalt.setColumns(10);
 
 		JButton btnDatenUpdaten = new JButton("Daten updaten");
-		contentPane.add(btnDatenUpdaten, "cell 3 23,growx");
+		contentPane.add(btnDatenUpdaten, "cell 2 23,growx");
 		btnDatenUpdaten.addActionListener(new btnDatenUpdatenListener());
 
 		JLabel lblSpalteWelcheGendert = new JLabel("Spalte welche ge\u00E4ndert werden soll:");
@@ -182,83 +159,57 @@ public class Spieler extends JFrame {
 		txtIdloesch.setColumns(10);
 
 		JButton btnDatenLschen = new JButton("Daten l\u00F6schen");
-		contentPane.add(btnDatenLschen, "cell 3 25,growx");
+		contentPane.add(btnDatenLschen, "cell 2 25,growx");
 		btnDatenLschen.addActionListener(new btnDatenLschenListener());
 
 	}
 
-
-
-	public static JTextField getTextField_Nachname() {
-		return textField_Nachname;
+	public static JTextField getTextField_Art() {
+		return textField_Art;
 	}
 
-	public static void setTextField_Nachname(JTextField textField_Nachname) {
-		Spieler.textField_Nachname = textField_Nachname;
+	public static void setTextField_Art(JTextField textField_Art) {
+		FahrradGUI.textField_Art = textField_Art;
 	}
 
-	public static JTextField getTextField_EMail() {
-		return textField_EMail;
+	public static JTextField getTextField_Zoll() {
+		return textField_Zoll;
 	}
 
-	public static void setTextField_EMail(JTextField textField_EMail) {
-		Spieler.textField_EMail = textField_EMail;
+	public static void setTextField_Zoll(JTextField textField_Zoll) {
+		FahrradGUI.textField_Zoll = textField_Zoll;
 	}
 
-	public static JTextField getTextField_Benutzername() {
-		return textField_Benutzername;
+	public static JTextField getTextField_Marke() {
+		return textField_Marke;
 	}
 
-	public static void setTextField_Benutzername(JTextField textField_Benutzername) {
-		Spieler.textField_Benutzername = textField_Benutzername;
+	public static void setTextField_Marke(JTextField textField_Marke) {
+		FahrradGUI.textField_Marke = textField_Marke;
 	}
 
-	public static JTextField getTextField_Vorname() {
-		return textField_Vorname;
+	public JTextField getTextField_Farbe() {
+		return textField_Farbe;
 	}
 
-	public static void setTextField_Vorname(JTextField textField_Vorname) {
-		Spieler.textField_Vorname = textField_Vorname;
+	public void setTextField_Farbe(JTextField textField_Farbe) {
+		this.textField_Farbe = textField_Farbe;
 	}
 
-	public JTextField getTextField_PLZ() {
-		return textField_PLZ;
-	}
-
-	public void setTextField_PLZ(JTextField textField_PLZ) {
-		this.textField_PLZ = textField_PLZ;
-	}
-
-	public JTextField getTextField_Geburtstag() {
-		return textField_Geburtstag;
-	}
-
-	public void setTextField_Geburtstag(JTextField textField_Geburtstag) {
-		this.textField_Geburtstag = textField_Geburtstag;
-	}
-
-	public JTextField getTextField_Passwort() {
-		return textField_Passwort;
-	}
-
-	public void setTextField_Passwort(JTextField textField_Passwort) {
-		this.textField_Passwort = textField_Passwort;
-	}
-
-	public JTextField getTextField_UpdateNeueSpaltInhalt() {
+	public JTextField getTextField_UpdateSpalteinhalt() {
 		return textField_UpdateSpalteinhalt;
 	}
 
-	public void setTextField_UpdateNeueSpaltInhalt(JTextField textField_UpdateNeueSpaltInhalt) {
-		this.textField_UpdateSpalteinhalt = textField_UpdateNeueSpaltInhalt;
+	public void setTextField_UpdateSpalteinhalt(JTextField textField_UpdateSpalteinhalt) {
+		this.textField_UpdateSpalteinhalt = textField_UpdateSpalteinhalt;
 	}
 
-	public JTextField getTextField_UpdateSpaltenname() {
+	public JTextField getTextField_UpdateID() {
 		return textField_UpdateID;
 	}
 
-	public void setTextField_UpdateSpaltenname(JTextField textField_UpdateSpaltenname) {
-		this.textField_UpdateID = textField_UpdateSpaltenname;
+	public void setTextField_UpdateID(JTextField textField_UpdateID) {
+		this.textField_UpdateID = textField_UpdateID;
 	}
 
 	public JTextField getTxtIdloesch() {
@@ -277,30 +228,25 @@ public class Spieler extends JFrame {
 		this.textField_Spalte = textField_Spalte;
 	}
 
-
 	public class btnDatenHineinschreibenListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			Benutzer b = new Benutzer();
-			b.setVorname(textField_Vorname.getText());
-			b.setNachname(textField_Nachname.getText());
-			b.setBenutzername(textField_Benutzername.getText());
-			b.setEmail(textField_EMail.getText());
-			if(textField_PLZ.getText()!="")
+			Fahrrad f = new Fahrrad();
+			f.setArt(textField_Art.getText());
+			f.setFarbe(textField_Farbe.getText());
+			f.setMarke(textField_Marke.getText());
+			
+			if(textField_Farbe.getText()!="")
 			{
-				b.setPLZ(Integer.parseInt(textField_PLZ.getText()));
+				f.setZoll(Integer.parseInt(textField_Zoll.getText()));
 			}
-			b.setGeburtstagsdatum(textField_Geburtstag.getText());
-			b.setPassword(textField_Passwort.getText());
-			b.setFahrradführerschein(1);
-			//	b.setFahrradführerschein(i);
 
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
-				db.InsertBenutzer(conn, b);
+				db.InsertFahrrad(conn, f);
 
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
@@ -318,14 +264,14 @@ public class Spieler extends JFrame {
 	}
 
 	public class btnTabelleAktualisierenListener implements ActionListener {
-		ArrayList<Benutzer> b = null;
+		List<Fahrrad> f = null;
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
-				b = db.readBenutzer(conn);
+				f = db.readFahrrad(conn);
 
 
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -345,9 +291,10 @@ public class Spieler extends JFrame {
 			if (table.getRowCount() > 0) {
 				m.setRowCount(0);
 			}
-			for(int i=0;i<b.size();i++)
+			for(int i=0;i<f.size();i++)
 			{	
-				m.addRow(new String[] {""+(b.get(i).getBenutzerid()),b.get(i).getVorname(),b.get(i).getNachname(),b.get(i).getBenutzername(),b.get(i).getEmail(),b.get(i).getGeburtstagsdatum(),""+b.get(i).getPLZ(),""+b.get(i).isFahrradführerschein() });	
+				//"ID","Marke","Art","Farbe","Zoll
+				m.addRow(new String[] {""+(f.get(i).getRadid()),f.get(i).getMarke(),f.get(i).getArt(),f.get(i).getFarbe(),""+f.get(i).getZoll()});	
 			}
 
 		}
@@ -368,7 +315,7 @@ public class Spieler extends JFrame {
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
-				db.deleteBenutzer(conn,id);
+				db.deleteFahrrad(id,conn);
 
 			} catch (NumberFormatException n){
 				System.out.println("Die Eingabe war keine Zahl");
@@ -398,7 +345,7 @@ public class Spieler extends JFrame {
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
-				db.UpdateBenutzer(conn,spalte,spalteninhalt,id);
+				db.UpdateFahrrad(conn,spalte,spalteninhalt,id);
 
 			} catch (InstantiationException | IllegalAccessException e1) {
 				e1.printStackTrace();
@@ -409,4 +356,6 @@ public class Spieler extends JFrame {
 		}
 
 	}
+
+
 }

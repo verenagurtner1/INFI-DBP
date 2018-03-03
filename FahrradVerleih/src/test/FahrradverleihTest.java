@@ -524,7 +524,7 @@ public class FahrradverleihTest {
 		try {
 			db = new DBManager();
 			conn = db.getConnection();
-			db.UpdateVerleih(conn, rid, bid, "2018-03-10");
+			db.UpdateVerleih(conn, rid, bid,"DatumAUS", "2018-03-10");
 			
 			v=db.readVerleih(conn,1,1);
 			

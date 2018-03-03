@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.fabric.xmlrpc.base.Data;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class DBManager {
 
@@ -188,8 +189,9 @@ public class DBManager {
 			pstmt.executeUpdate();
 
 			pstmt.close();pstmt=null;
-		}catch (Exception e) {
-			// TODO: handle exception
+		}catch (MySQLSyntaxErrorException m){
+			System.out.println("Spaltenname wurde falsch geschrieben");
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
@@ -408,12 +410,12 @@ public class DBManager {
 
 	}
 
-	public void UpdateVerleih(Connection conn,int bid, int rid,String datum) {
+	public void UpdateVerleih(Connection conn,int bid, int rid,String spalte,String datum) {
 
-		String Insert_Hash="UPDATE verleih set DatumZURUECK ='"+datum+"' WHERE RadID ='"+rid+"'&& BenutzerID='"+bid+"';";
+		String SQL="UPDATE verleih set "+spalte+" ='"+datum+"' WHERE RadID ='"+rid+"'&& BenutzerID='"+bid+"';";
 
 		try {
-			pstmt = conn.prepareStatement(Insert_Hash);
+			pstmt = conn.prepareStatement(SQL);
 			pstmt.executeUpdate();
 
 			pstmt.close();pstmt=null;
