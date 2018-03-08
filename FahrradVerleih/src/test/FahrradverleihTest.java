@@ -88,7 +88,7 @@ public class FahrradverleihTest {
 			
 			Benutzer b=db.readBenutzer(conn,1);
 			
-			assertEquals("Verena",b.getVorname());
+			assertEquals("Sandra",b.getVorname());
 			assertEquals("Gurtner",b.getNachname());
 			assertEquals(6406,b.getPLZ());
 			assertEquals("verena.gu@aon.at",b.getEmail());
@@ -524,7 +524,7 @@ public class FahrradverleihTest {
 		try {
 			db = new DBManager();
 			conn = db.getConnection();
-			db.UpdateVerleih(conn, rid, bid,"DatumAUS", "2018-03-10");
+			db.UpdateVerleih(conn, rid, bid,"DatumZurueck", "2018-03-10");
 			
 			v=db.readVerleih(conn,1,1);
 			
@@ -551,8 +551,8 @@ public class FahrradverleihTest {
 	
 	@Test
 	public void TestDeleteVerleih()  {
-		int rid=1;
-		int bid=1;
+		int rid=2;
+		int bid=2;
 		
 			try {
 				db = new DBManager();

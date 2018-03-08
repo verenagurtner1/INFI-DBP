@@ -315,6 +315,7 @@ public class FahrradGUI extends JFrame {
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
+				db.deleteVerleihrad(conn,id);
 				db.deleteFahrrad(id,conn);
 
 			} catch (NumberFormatException n){

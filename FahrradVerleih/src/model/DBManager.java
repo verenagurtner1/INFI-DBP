@@ -410,9 +410,9 @@ public class DBManager {
 
 	}
 
-	public void UpdateVerleih(Connection conn,int bid, int rid,String spalte,String datum) {
+	public void UpdateVerleih(Connection conn, int bid,int rid,String spalte,String datum) {
 
-		String SQL="UPDATE verleih set "+spalte+" ='"+datum+"' WHERE RadID ='"+rid+"'&& BenutzerID='"+bid+"';";
+		String SQL="UPDATE verleih set "+spalte+" ='"+datum+"' WHERE radid='"+rid+"' and benutzerid='"+bid+"';";
 
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -426,9 +426,39 @@ public class DBManager {
 
 	}
 
-	public void deleteVerleih(Connection conn,int bid,int rid) {
+	public void deleteVerleih(Connection conn,int rid, int bid) {
 		{
-			String SQL="delete from verleih where BenutzerID='"+bid+"' && RadID='"+rid+"';";
+			String SQL="delete from verleih where radid='"+rid+"' and benutzerid='"+bid+"';";
+
+			try {
+				pstmt = conn.prepareStatement(SQL);
+				pstmt.executeUpdate();
+
+				pstmt.close(); pstmt=null;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void deleteVerleihrad(Connection conn,int rid) {
+		{
+			String SQL="delete from verleih where radid='"+rid+"';";
+
+			try {
+				pstmt = conn.prepareStatement(SQL);
+				pstmt.executeUpdate();
+
+				pstmt.close(); pstmt=null;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void deleteVerleihben(Connection conn,int bid) {
+		{
+			String SQL="delete from verleih where benutzerid='"+bid+"';";
 
 			try {
 				pstmt = conn.prepareStatement(SQL);

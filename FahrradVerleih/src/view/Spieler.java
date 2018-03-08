@@ -368,6 +368,7 @@ public class Spieler extends JFrame {
 			try {
 				DBManager db = new DBManager();
 				Connection conn = db.getConnection();
+				db.deleteVerleihben(conn,id);
 				db.deleteBenutzer(conn,id);
 
 			} catch (NumberFormatException n){
